@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dexonline from 'dexonline-scraper';
+import * as Dexonline from 'dexonline-scraper';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,7 +34,7 @@ app.post('/api/validate-word', async (req, res) => {
     }
 
     // Check word in dexonline
-    const result = await dexonline(normalizedWord);
+    const result = await Dexonline.get(normalizedWord);
 
     if (result && result.definitions && result.definitions.length > 0) {
       // Word exists, return first definition
