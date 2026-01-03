@@ -1,0 +1,15 @@
+{
+  "name": "cuvinte-game",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Romanian word game app",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "backend": "pnpm --filter backend dev",
+    "frontend": "pnpm --filter frontend dev"
+  },
+  "keywords": ["romanian", "word-game", "vue", "typescript"],
+  "author": "",
+  "license": "MIT"
+}
