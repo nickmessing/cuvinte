@@ -22,16 +22,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import PlayerSetup from './components/PlayerSetup.vue';
 import GameBoard from './components/GameBoard.vue';
 import { useGameState } from './composables/useGameState';
 import { useWordValidation } from './composables/useWordValidation';
 
-const { state: gameState, addPlayer, removePlayer, startGame, resetGame, addWord, checkIfWordUsed, getPlayerStats } = useGameState();
+const { state: gameState, addPlayer, removePlayer, startGame, resetGame, addWord, checkIfWordUsed, getPlayerStats, initializeState } = useGameState();
 const { validateWord } = useWordValidation();
 const isLoading = ref(false);
 const gameBoardRef = ref<InstanceType<typeof GameBoard> | null>(null);
+
+// Initialize state from IndexedDB on mount
+onMounted(async () => {
+  await initializeState();
+});
 
 const handleAddPlayer = (name: string) => {
   addPlayer(name);

@@ -8,6 +8,7 @@ O aplicație de joc în limba română pentru verificarea și înregistrarea cuv
 - 📝 **Validare Cuvinte**: Verifică automat dacă cuvintele există în dicționar folosind Dexonline
 - 🔍 **Istoric**: Urmărește cine a spus ce cuvânt și când
 - 📊 **Statistici**: Vezi câte cuvinte a spus fiecare jucător
+- 💾 **Persistență**: Starea jocului este salvată automat în IndexedDB și se păstrează după refresh
 - 📱 **Mobile-First**: Optimizat pentru dispozitive mobile
 
 ## Stack Tehnologic
@@ -15,6 +16,7 @@ O aplicație de joc în limba română pentru verificarea și înregistrarea cuv
 - **Frontend**: Vue.js 3 + TypeScript + Vite + Tailwind CSS
 - **Backend**: Node.js + Express + TypeScript
 - **API**: Dexonline Scraper pentru verificarea cuvintelor
+- **Persistență**: IndexedDB (folosind idb)
 - **Monorepo**: pnpm workspace
 
 ## Instalare
@@ -98,6 +100,7 @@ cuvinte/
      - Dacă cuvântul există în dicționar
      - Dacă cuvântul a mai fost folosit anterior
 4. **Urmărește Progresul**: Vezi statistici și istoric în timp real
+5. **Persistență Automată**: Jocul este salvat automat - poți închide și redeschide pagina fără să pierzi progresul
 
 ## API Endpoints
 

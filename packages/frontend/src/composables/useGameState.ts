@@ -1,5 +1,6 @@
-import { reactive, computed } from 'vue';
+import { reactive, computed, watch } from 'vue';
 import type { Player, UsedWord, GameState } from '../types';
+import { usePersistence } from './usePersistence';
 
 const state = reactive<GameState>({
   players: [],
@@ -7,7 +8,31 @@ const state = reactive<GameState>({
   isGameStarted: false
 });
 
+const { saveGameState, loadGameState } = usePersistence();
+
+// Watch state changes and persist to IndexedDB
+let isInitialized = false;
+watch(
+  () => ({ ...state, usedWords: [...state.usedWords], players: [...state.players] }),
+  (newState) => {
+    // Only save after initialization to avoid saving empty state on load
+    if (isInitialized) {
+      saveGameState(newState);
+    }
+  },
+  { deep: true }
+);
+
 export function useGameState() {
+  const initializeState = async () => {
+    const savedState = await loadGameState();
+    if (savedState) {
+      state.players = savedState.players;
+      state.usedWords = savedState.usedWords;
+      state.isGameStarted = savedState.isGameStarted;
+    }
+    isInitialized = true;
+  };
   const addPlayer = (name: string) => {
     if (name.trim() && !state.isGameStarted) {
       state.players.push({
@@ -67,6 +92,7 @@ export function useGameState() {
     resetGame,
     addWord,
     checkIfWordUsed,
-    getPlayerStats
+    getPlayerStats,
+    initializeState
   };
 }
