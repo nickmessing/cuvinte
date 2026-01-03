@@ -32,9 +32,9 @@ const props = defineProps<{
 }>();
 
 const sortedWords = computed(() => {
-  return [...props.usedWords].sort((a, b) =>
-    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  return [...props.usedWords]
+    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    .slice(0, 100);
 });
 
 const formatTime = (timestamp: Date) => {

@@ -13,11 +13,13 @@ const { saveGameState, loadGameState, clearGameState } = usePersistence();
 // Watch state changes and persist to IndexedDB
 let isInitialized = false;
 watch(
-  () => ({ ...state, usedWords: [...state.usedWords], players: [...state.players] }),
+  () => state,
   (newState) => {
     // Only save after initialization to avoid saving empty state on load
     if (isInitialized) {
-      saveGameState(newState);
+      // Deep clone to plain object to avoid "Proxy object could not be cloned" error
+      const plainState: GameState = JSON.parse(JSON.stringify(newState));
+      saveGameState(plainState);
     }
   },
   { deep: true }

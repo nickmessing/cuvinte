@@ -1,9 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import * as Dexonline from 'dexonline-scraper';
+import express from "express";
+import cors from "cors";
+import * as Dexonline from "dexonline-scraper";
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT != null ? Number(process.env.PORT) : 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -18,55 +18,52 @@ interface WordDefinition {
   exists: boolean;
 }
 
-app.post('/api/validate-word', async (req, res) => {
+app.post("/api/validate-word", async (req, res) => {
   try {
     const { word } = req.body as ValidateWordRequest;
 
-    if (!word || typeof word !== 'string') {
-      return res.status(400).json({ error: 'Cuvântul este necesar' });
+    if (!word || typeof word !== "string") {
+      return res.status(400).json({ error: "Cuvântul este necesar" });
     }
 
     // Normalize the word (lowercase, trim)
     const normalizedWord = word.trim().toLowerCase();
 
     if (normalizedWord.length === 0) {
-      return res.status(400).json({ error: 'Cuvântul nu poate fi gol' });
+      return res.status(400).json({ error: "Cuvântul nu poate fi gol" });
     }
 
     // Check word in dexonline
     const result = await Dexonline.get(normalizedWord);
+    const definition = result?.synthesis.at(0)?.definitions.at(0)?.value;
 
-    if (result && result.definitions && result.definitions.length > 0) {
-      // Word exists, return first definition
-      const definition = result.definitions[0];
-
+    if (definition != null) {
       return res.json({
         exists: true,
         word: normalizedWord,
         definition: definition,
-        fullData: result
-      } as WordDefinition & { fullData: any });
+      } as WordDefinition);
     } else {
       // Word doesn't exist
       return res.json({
         exists: false,
         word: normalizedWord,
-        definition: ''
+        definition: "",
       } as WordDefinition);
     }
   } catch (error) {
-    console.error('Error validating word:', error);
+    console.error("Error validating word:", error);
     return res.status(500).json({
-      error: 'Eroare la verificarea cuvântului',
-      details: error instanceof Error ? error.message : 'Unknown error'
+      error: "Eroare la verificarea cuvântului",
+      details: error instanceof Error ? error.message : "Unknown error",
     });
   }
 });
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Backend server running on http://0.0.0.0:${PORT}`);
 });
