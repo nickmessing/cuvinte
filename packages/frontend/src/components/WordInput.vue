@@ -79,6 +79,8 @@ const notificationClass = computed(() => {
 
 const handlePlayerClick = (playerId: string) => {
   if (word.value.trim()) {
+    notification.value = null;
+    lastValidWord.value = null;
     emit('submit-word', word.value, playerId);
   }
 };
