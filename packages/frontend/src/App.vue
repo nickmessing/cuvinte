@@ -50,9 +50,9 @@ const handleStartGame = () => {
   startGame();
 };
 
-const handleResetGame = () => {
-  if (confirm('Sigur vrei să resetezi jocul? Toate cuvintele vor fi șterse.')) {
-    resetGame();
+const handleResetGame = async () => {
+  if (confirm('Ești sigur?')) {
+    await resetGame();
   }
 };
 

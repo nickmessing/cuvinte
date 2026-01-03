@@ -8,7 +8,7 @@ const state = reactive<GameState>({
   isGameStarted: false
 });
 
-const { saveGameState, loadGameState } = usePersistence();
+const { saveGameState, loadGameState, clearGameState } = usePersistence();
 
 // Watch state changes and persist to IndexedDB
 let isInitialized = false;
@@ -54,9 +54,11 @@ export function useGameState() {
     }
   };
 
-  const resetGame = () => {
+  const resetGame = async () => {
+    state.players = [];
     state.usedWords = [];
     state.isGameStarted = false;
+    await clearGameState();
   };
 
   const addWord = (word: string, playerId: string, definition: string) => {
